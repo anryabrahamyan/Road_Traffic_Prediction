@@ -7,7 +7,10 @@ import requests
 import cv2
 import matplotlib.pyplot as plt 
 from params_and_keys import *
+from detect_cars import model_predict
 
+module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"
+detector = hub.load(module_handle).signatures['default']
 
 def record_and_store():
     """Records and stores the frames of the video
@@ -78,10 +81,10 @@ def call_apis(LAT = LAT_TIMES,LONG = LONG_TIMES,box_left = LEFT_TIMES,
 
 #################################################################
 
-def model_predict():
+def model_predictor(img_path, detector):
     """Predictions on the stores frames
     """
-    pass
+    return model_predict(img_path, detector)
 
 if __name__ == "__main__":
     print(call_apis())

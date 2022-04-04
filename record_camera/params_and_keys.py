@@ -25,3 +25,5 @@ WEATHER_API_KEY = ''#api key for the weather api (don't save)
 TRAFFIC_API_KEY = ''#api key for the traffic api (don't save)
 
 
+CAR_NAMES = ['Car', 'Taxi', 'Land vehicle', 'Van', 'Truck', 'Vehicle', 'Bus', 'Motorcycle', 'Ambulance']
+THRESHOLDS = [0.9,0.7,0.5,0.3,0.1]
