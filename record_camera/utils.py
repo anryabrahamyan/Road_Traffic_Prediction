@@ -1,25 +1,26 @@
 """
 File for data recording utilities
 """
-import os
+import sys
 from typing import List
 import requests
-import cv2
-import matplotlib.pyplot as plt 
+import tensorflow_hub as hub
 from params_and_keys import *
+
+sys.path.append('predictor/')
 from detect_cars import model_predict
 
 module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"
 detector = hub.load(module_handle).signatures['default']
 
-def record_and_store():
+def record_and_store(link:str)->None:
     """Records and stores the frames of the video
     """
     pass
 
 
 ### API part ##################################################
-def extract_weather_info(weather_api_response):
+def extract_weather_info(weather_api_response:dict[str,float])->list[str]:
     """Extract info from the weather API response
     """
     weather_part= weather_api_response.get("weather", WEATHER_ERROR_WEATHER)[0]
@@ -45,7 +46,7 @@ def extract_weather_info(weather_api_response):
     
     return total_info
 
-def extract_traffic_info(traffic_api_response):
+def extract_traffic_info(traffic_api_response:dict[str,float])->list[str]:
     """Extract info from the traffic API response
     """
     #TODO same for rest of accident types
@@ -64,9 +65,9 @@ def call_apis(LAT = LAT_TIMES,LONG = LONG_TIMES,box_left = LEFT_TIMES,
              box_up = UP_TIMES, box_right =RIGHT_TIMES,box_down = DOWN_TIMES) ->List[str]:
     """Call the extra data apis
     """
-    weather_call = f"https://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LONG}&appid={WEATHER_API_KEY}&units=metric"
+    weather_call = create_weather_link(LAT,LONG,WEATHER_API_KEY)
     
-    traffic_call = f"http://www.mapquestapi.com/traffic/v2/incidents?key={TRAFFIC_API_KEY}&boundingBox={box_left},{box_up},{box_right},{box_down}&filters=construction,incidents,event,accident"
+    traffic_call = create_incidents_link(TRAFFIC_API_KEY,box_left,box_up,box_right,box_down)
     
     weather_info = requests.get(weather_call).json()
     traffic_info = requests.get(traffic_call).json()

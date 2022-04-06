@@ -27,3 +27,9 @@ TRAFFIC_API_KEY = ''#api key for the traffic api (don't save)
 
 CAR_NAMES = ['Car', 'Taxi', 'Land vehicle', 'Van', 'Truck', 'Vehicle', 'Bus', 'Motorcycle', 'Ambulance']
 THRESHOLDS = [0.9,0.7,0.5,0.3,0.1]
+
+def create_weather_link(LAT,LONG,WEATHER_API_KEY):
+      return f"https://api.openweathermap.org/data/2.5/weather?lat={LAT}&lon={LONG}&appid={WEATHER_API_KEY}&units=metric"
+
+def create_incidents_link(TRAFFIC_API_KEY,box_left,box_up,box_right,box_down):
+      return f"http://www.mapquestapi.com/traffic/v2/incidents?key={TRAFFIC_API_KEY}&boundingBox={box_left},{box_up},{box_right},{box_down}&filters=construction,incidents,event,accident"
