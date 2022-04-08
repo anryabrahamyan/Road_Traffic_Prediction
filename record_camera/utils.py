@@ -33,7 +33,7 @@ def extract_weather_info(weather_api_response: dict[str, float]) -> list[str]:
     visibility = weather_api_response.get("visibility", WEATHER_ERROR_VISIBILITY)
 
     wind_info = weather_api_response.get("wind", WEATHER_ERROR_WIND)
-    # print(wind_info)
+
     wind_speed, wind_angle = wind_info.values()
 
     cloud_info = weather_api_response.get("clouds", WEATHER_ERROR_CLOUD)
@@ -48,7 +48,7 @@ def extract_weather_info(weather_api_response: dict[str, float]) -> list[str]:
 def extract_traffic_info(traffic_api_response: dict[str, float]) -> list[str]:
     """Extract info from the traffic API response
     """
-    # TODO same for rest of accident types
+
     incidents = traffic_api_response.get("incidents", None)
     if incidents:
         maximum_severity = max([incident.get("severity", 0) for incident in incidents])
