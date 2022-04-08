@@ -6,6 +6,7 @@ LONG_TIMES = -73.985130
 LAT_TIMES = 40.758896
 LEFT_TIMES,UP_TIMES,RIGHT_TIMES,DOWN_TIMES = 40.74,-73.8,40.77,-74.1
 
+LINK = "https://www.youtube.com/watch?v=AdUw5RdyZxI"
 WEATHER_ERROR_WEATHER = [{"main":None,"description":None}]
 WEATHER_ERROR_TEMP = {"temp":None,
       "feels_like":None,
