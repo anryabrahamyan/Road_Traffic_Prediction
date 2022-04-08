@@ -4,14 +4,19 @@ Main recording loop
 from datetime import datetime
 import time
 from utils import *
+from params_and_keys import LINK
 
-def record()->List[str]:
+
+def record(link:str = LINK )->List[str]:
     """
     Create recording row
     """
+    record_and_store( link )
     api_responses = call_apis()
-    return api_responses
-    #TODO return list of strings
+    number_info = model_predictor()
+    final_row = [str(info) for info in number_info.extend(api_responses)]
+    
+    return final_row
     
     
 def store():
@@ -20,7 +25,7 @@ def store():
     while True:
         start = time.time()
         current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        new_row = record()
+        new_row = record(link=LINK)
         total_row = [current_time]+new_row
         
         with open("dataset/data.csv","a") as data:
