@@ -29,8 +29,8 @@ WEATHER_ERROR_WIND = {
 WEATHER_ERROR_CLOUD = {"all":None}
 FRAME_PATH = os.path.join(dirname(dirname(__file__)),"dataset","frame.jpg")
 
-WEATHER_API_KEY = 'a99f28dfea9c9d322a6d7dcb0511439a'#api key for the weather api (don't save)
-TRAFFIC_API_KEY = 'GwmX0PCmCrB92AbMIxV0AnRyg1jGJgDs'#api key for the traffic api (don't save)
+WEATHER_API_KEY = ''#api key for the weather api (don't save)
+TRAFFIC_API_KEY = ''#api key for the traffic api (don't save)
 
 
 CAR_NAMES = ['Car', 'Taxi', 'Land vehicle', 'Van', 'Truck', 'Vehicle', 'Bus', 'Motorcycle', 'Ambulance']

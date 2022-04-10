@@ -7,7 +7,6 @@ import tensorflow as tf
 # For drawing onto the image.
 import numpy as np
 from params_and_keys import *
-import matplotlib.pyplot as plt
 
 # Check available GPU devices.
 # print("The following GPU devices are available: %s" % tf.test.gpu_device_name())
@@ -22,7 +21,6 @@ def model_predict(img_path:str, detector:tf.keras.Model)->dict[str,int]:
       img = tf.image.resize([img], (640, 640))
       img = tf.cast(img, dtype = tf.float32)
       img = img/255
-      plt.imshow(img.numpy()[0,:,:,:])
       return img
 
     def run_detector(detector:tf.keras.Model, path:str)->dict[str,np.array]:
