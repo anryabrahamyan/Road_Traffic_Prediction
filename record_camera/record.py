@@ -4,17 +4,18 @@ Main recording loop
 from datetime import datetime
 import time
 from utils import *
-from params_and_keys import LINK
+from params_and_keys import FRAME_PATH,COLUMN_NAMES
 
 
-def record(link:str = LINK )->List[str]:
+def record()->List[str]:
     """
     Create recording row
     """
-    record_and_store( link )
+    record_and_store()
     api_responses = call_apis()
-    number_info = model_predictor()
-    final_row = [str(info) for info in number_info.extend(api_responses)]
+    number_info = model_predictor(FRAME_PATH,detector)
+    api_responses.extend(number_info.values())
+    final_row = [str(info) for info in api_responses]
     
     return final_row
     
@@ -22,14 +23,19 @@ def record(link:str = LINK )->List[str]:
 def store():
     """Store the recorded rows
     """
+    with open("dataset/data.csv","a") as data:
+        data.write(",".join(COLUMN_NAMES)+"\n")
     while True:
         start = time.time()
-        current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
-        new_row = record(link=LINK)
-        total_row = [current_time]+new_row
-        
-        with open("dataset/data.csv","a") as data:
-            data.write(",".join(total_row)+"\n")
+        try:
+            current_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+            new_row = record()
+            total_row = [current_time]+new_row
+            
+            with open("dataset/data.csv","a") as data:
+                data.write(",".join(total_row)+"\n")
+        except:
+            print('something went wrong')
         end = time.time()
         elapsed = end-start
         if elapsed<WAIT_TIME:

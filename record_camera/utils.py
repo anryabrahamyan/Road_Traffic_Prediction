@@ -1,27 +1,28 @@
 """
 File for data recording utilities
 """
-import sys
 from typing import List
 import requests
 import tensorflow_hub as hub
-from params_and_keys import *
+import tensorflow as tf
 import streamlink
+import sys
 import cv2
+from os.path import dirname
+from params_and_keys import *
 
-sys.path.append('predictor/')
-from detect_cars import model_predict
+sys.path.insert(0,dirname(dirname(__file__)))
+from predictor.detect_cars import model_predict
 
 module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"
 detector = hub.load(module_handle).signatures['default']
+streams = streamlink.streams(LINK)
 
-
-def record_and_store(link: str) -> None:
+def record_and_store(streams = streams) -> None:
     """Records and stores the frames of the video
     """
-    streams = streamlink.streams(link)
     cap = cv2.VideoCapture(streams["best"].url)
-    ret, frame = cap.read()
+    _, frame = cap.read()
     cv2.imwrite('dataset/frame.jpg', frame)
 
 
@@ -38,8 +39,7 @@ def extract_weather_info(weather_api_response: dict[str, float]) -> list[str]:
     visibility = weather_api_response.get("visibility", WEATHER_ERROR_VISIBILITY)
 
     wind_info = weather_api_response.get("wind", WEATHER_ERROR_WIND)
-
-    wind_speed, wind_angle = wind_info.values()
+    wind_speed, wind_angle= wind_info.get('speed',None),wind_info.get('deg',None)
 
     cloud_info = weather_api_response.get("clouds", WEATHER_ERROR_CLOUD)
     clouds = cloud_info["all"]
@@ -92,9 +92,9 @@ def call_apis(LAT=LAT_TIMES, LONG=LONG_TIMES, box_left=LEFT_TIMES,
 def model_predictor(img_path, detector):
     """Predictions on the stores frames
     """
-    return model_predict(img_path, detector)
-
+    with tf.device('/CPU:0'):
+        return model_predict(img_path, detector)
 
 if __name__ == "__main__":
-    #print(call_apis())
+    print(call_apis())
     record_and_store()

@@ -1,14 +1,13 @@
 """
 File for vehicle count predictions
 """
-
-
 # For running inference on the TF-Hub module.
 import tensorflow as tf
 
 # For drawing onto the image.
 import numpy as np
 from params_and_keys import *
+import matplotlib.pyplot as plt
 
 # Check available GPU devices.
 # print("The following GPU devices are available: %s" % tf.test.gpu_device_name())
@@ -23,6 +22,7 @@ def model_predict(img_path:str, detector:tf.keras.Model)->dict[str,int]:
       img = tf.image.resize([img], (640, 640))
       img = tf.cast(img, dtype = tf.float32)
       img = img/255
+      plt.imshow(img.numpy()[0,:,:,:])
       return img
 
     def run_detector(detector:tf.keras.Model, path:str)->dict[str,np.array]:
@@ -45,7 +45,7 @@ def model_predict(img_path:str, detector:tf.keras.Model)->dict[str,int]:
       """Extract the vehicle related predictions from the models predictions
       """
       car_dict = create_counts_dict()
-      for ind, detection_score in enumerate(img_res[0].get("detection_scores",[])):
+      for ind, detection_score in enumerate(img_res.get("detection_scores",[])):
           for threshold in thresholds:
               if detection_score >= threshold:
                   vehicle_type = entities[ind]
@@ -56,7 +56,7 @@ def model_predict(img_path:str, detector:tf.keras.Model)->dict[str,int]:
 
     img_res = run_detector(detector, img_path)
     entities = []
-    for i in img_res[0].get("detection_class_entities",[]):
+    for i in img_res.get("detection_class_entities",[]):
       entities.append(i.decode("utf-8"))
 
     vehicle_counts = get_counts_for_thresholds()
