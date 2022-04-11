@@ -6,6 +6,8 @@ from typing import List
 import requests
 import tensorflow_hub as hub
 from params_and_keys import *
+import streamlink
+import cv2
 
 sys.path.append('predictor/')
 from detect_cars import model_predict
@@ -17,7 +19,10 @@ detector = hub.load(module_handle).signatures['default']
 def record_and_store(link: str) -> None:
     """Records and stores the frames of the video
     """
-    pass
+    streams = streamlink.streams(link)
+    cap = cv2.VideoCapture(streams["best"].url)
+    ret, frame = cap.read()
+    cv2.imwrite('dataset/frame.jpg', frame)
 
 
 ### API part ##################################################
@@ -91,4 +96,5 @@ def model_predictor(img_path, detector):
 
 
 if __name__ == "__main__":
-    print(call_apis())
+    #print(call_apis())
+    record_and_store()
