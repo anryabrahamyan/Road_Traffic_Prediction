@@ -11,9 +11,12 @@ def record()->List[str]:
     """
     Create recording row
     """
-    record_and_store()
+    try:
+        record_and_store()
+        number_info = model_predictor(FRAME_PATH,detector)
+    except:
+        number_info = {f"info_{i}":None for i in range(45)}
     api_responses = call_apis()
-    number_info = model_predictor(FRAME_PATH,detector)
     api_responses.extend(number_info.values())
     final_row = [str(info) for info in api_responses]
     
@@ -23,8 +26,8 @@ def record()->List[str]:
 def store():
     """Store the recorded rows
     """
-    with open("dataset/data.csv","a") as data:
-        data.write(",".join(COLUMN_NAMES)+"\n")
+    # with open("dataset/data.csv","a") as data:
+    #     data.write(",".join(COLUMN_NAMES)+"\n")
     while True:
         start = time.time()
         try:
